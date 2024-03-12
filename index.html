@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Avatar</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="canvasCnt">
+    <canvas id="myCanvas"></canvas>
+    <div class="flex">
+      <canvas id="camCanvas" ></canvas>
+      <br>
+      <div class="flex" style="flex-direction: row; gap: 10px;" >
+        <button onclick="fixPoints()">start</button>
+        <select id="inputMode">
+          <option value="mouse">mouse</option>
+          <option value="video1">video1</option>  
+          <option value="video2">video2</option>  
+          <option value="camera">camera</option>
+        </select>
+      </div>
+      <br>
+      <div class="flex">
+        MouthX: <input type="range" min="-20" max="20" step="1"  value="0" id="mouthX" />
+        MouthY: <input type="range" min="-20" max="20" step = '1' value="0" id="mouthY" />
+      </div>
+    </div>
+  </div>
+
+  <script src="physics.js"></script>
+  <script src="avatar.js"></script>
+  <script src="utils.js"></script>
+  <script src="camera.js"></script>
+  <script src="script.js"></script>
+  
+</body>
+</html>
