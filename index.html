@@ -13,12 +13,12 @@
       <canvas id="camCanvas" ></canvas>
       <br>
       <div class="flex" style="flex-direction: row; gap: 10px;" >
-        <button onclick="fixPoints()">start</button>
-        <select id="inputMode">
-          <option value="mouse">mouse</option>
-          <option value="video1">video1</option>  
-          <option value="video2">video2</option>  
-          <option value="camera">camera</option>
+        <button class="btns" id="startBtn" onclick="fixPoints()" style="display: none;">Start</button>
+        <select id="inputMode" class="btns">
+          <option value="mouse">Mouse</option>
+          <option value="video1">Video1</option>  
+          <option value="video2">Video2</option>  
+          <option value="camera">Camera</option>
         </select>
       </div>
       <br>

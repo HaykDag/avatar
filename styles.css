@@ -8,11 +8,21 @@ body {
   background-color: black;
 }
 
+.btns {
+  background-color: teal;
+  color: white;
+  font-size: large;
+  padding: 6px;
+  border-radius: 10px;
+  border: 1px solid pink;
+}
+
 .flex {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  color: white;
 }
 
 .canvasCnt {
@@ -20,11 +30,6 @@ body {
   justify-content: center;
   align-items: center;
   gap: 20px;
-}
-
-video {
-  width: 400px;
-  height: 400px;
 }
 
 #camCanvas {

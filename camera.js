@@ -1,6 +1,8 @@
 const camCanvas = document.getElementById('camCanvas');
 const camCtx = camCanvas.getContext('2d',{ willReadFrequently: true });
 const inputModeEl = document.getElementById('inputMode');
+const startBtn = document.getElementById('startBtn');
+
 let video = null;
 let mode = 'mouse';
 
@@ -12,6 +14,11 @@ inputModeEl.onchange = (e)=>{
   }else{
     initCamera();
     animate();
+  }
+  if(mode==='camera'){
+    startBtn.style.display = 'block';
+  }else{
+    startBtn.style.display = 'none';
   }
 }
 
@@ -33,8 +40,6 @@ function initCamera(){
       
       video.play();
       video.onloadeddata = ()=>{
-        video.style.width = 400;
-        video.style.height = 400;
         camCanvas.width = video.videoWidth;
         camCanvas.height = video.videoHeight;
       }
