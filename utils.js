@@ -23,7 +23,6 @@ function getMarkedLocs(imageData,color = [0,0,255],threshold = 150){
     const picselIndex = i/4;
     for(let j  = 0;j<colors.length;j++){
       if(isMatch([r,g,b],colors[j],threshold)){
-        //if(j===2) console.log([r,g,b]);
         const y = Math.floor(picselIndex/imageData.width);
         const x = picselIndex%imageData.width;
         locs[j].push({x,y});
