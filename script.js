@@ -20,11 +20,11 @@ let refMouthY = 0;
 
 const sliderX = document.getElementById('mouthX');
 sliderX.onchange = (e)=>{
-  updateMouthX(sliderX.value);
+  mouthX = sliderX.value;
 }
 const sliderY = document.getElementById('mouthY');
 sliderY.onchange = (e)=>{
-  updateMouthY(sliderY.value);
+  mouthY = sliderY.value;
 }
 
 initMouseMode();
@@ -43,8 +43,10 @@ function animate(){
   
     let mouthBottomPoint = null;
     let mouthUpPoint = null;
+    //locs = [red,green,blue];
+    //locs[1] = green - mouth points
     if(locs[1].length){
-      const {mouthLeft,mouthRight,mouthUp,mouthBottom} = getMouthPoints(locs[1]);
+      const {mouthLeft,mouthRight,mouthUp,mouthBottom} = getMouthPoints2(locs[1]);
       const mouthLeftPoint = average(mouthLeft);
       const mouthRightPoint = average(mouthRight);
       mouthUpPoint = average(mouthUp);
@@ -53,24 +55,26 @@ function animate(){
       mouthX = distance(mouthRightPoint,mouthLeftPoint);
       mouthY = distance(mouthBottomPoint,mouthUpPoint);
       
-      drawPoint(camCtx,mouthLeftPoint[0],mouthLeftPoint[1],'orange',15);
-      drawPoint(camCtx,mouthRightPoint[0],mouthRightPoint[1],'orange',15);
-      drawPoint(camCtx,mouthUpPoint[0],mouthUpPoint[1],'green',15);
-      drawPoint(camCtx,mouthBottomPoint[0],mouthBottomPoint[1],'green',15);
+      drawPoint(camCtx,mouthLeftPoint[0],mouthLeftPoint[1],'orange',5);
+      drawPoint(camCtx,mouthRightPoint[0],mouthRightPoint[1],'orange',5);
+      drawPoint(camCtx,mouthUpPoint[0],mouthUpPoint[1],'green',5);
+      drawPoint(camCtx,mouthBottomPoint[0],mouthBottomPoint[1],'green',5);
       greenPoint = true;
     }else{
       greenPoint = false;
       mouthBottomPoint = null;
       mouthUpPoint = null;
     } 
-
+    //locs[0] = red Point
+    //only take blue points that is lower than the mouthBottomPoint
     if(locs[0].length && mouthBottomPoint){
       const points = locs[0].filter((loc)=>loc.y>mouthBottomPoint[1]);
       redPoint = average(points);
     }else{
       redPoint = null;
     } 
-
+    //locs[2] = blue Point 
+    //only take blue points that is higher than the mouthUpPoint
     if(locs[2].length && mouthUpPoint){
       const points = locs[2].filter((loc)=>loc.y<mouthUpPoint[1]);
       bluePoint = average(points);
@@ -79,17 +83,20 @@ function animate(){
     } 
     
     if(bluePoint){
-      drawPoint(camCtx,bluePoint[0],bluePoint[1],'blue',10);
+      drawPoint(camCtx,bluePoint[0],bluePoint[1],'blue',5);
     }
     if(redPoint){
-      drawPoint(camCtx,redPoint[0],redPoint[1],'red',10);
+      drawPoint(camCtx,redPoint[0],redPoint[1],'red',5);
     }
-
+    //if we have headPoint and chestPoint and refPoints(that should be fixed)
+    //then calculate the offsetX and offsetY
     if(redPoint && bluePoint && refPoints.length){
-      offsetX = (bluePoint[0]-redPoint[0]+refPoints[0]);
+      offsetX = bluePoint[0]-redPoint[0]+refPoints[0];
       offsetY = bluePoint[1]-redPoint[1]+refPoints[1];
     }
-    if(mode==='video1' || mode==='video2' && refMouthX === 0){
+    //if the mode is one of the videos
+    //and this is the first fixation
+    if(mode!=='camera' && refMouthX === 0){
       fixPoints();
     }
   }
@@ -141,12 +148,6 @@ function fixPoints(){
   }
 }
 
-function updateMouthX(x){
-  mouthX = x;
-}
-function updateMouthY(y){
-  mouthY = y
-}
 
 function getMouthPoints(locs){
   const mouthLeft = [];
@@ -175,13 +176,55 @@ function getMouthPoints(locs){
     const rDist = Math.abs(mostRightPoint-x);
     const uDist = Math.abs(mostUpPoint-y);
     const bDist = Math.abs(mostBottomPoint-y);
+    
+    const minDist = Math.min(lDist,rDist,uDist,bDist);
 
-    const min = Math.min(lDist,rDist,uDist,bDist)
-    if(lDist===min){
+    if(lDist===minDist){
       mouthLeft.push(locs[i])
-    }else if(rDist===min){
+    }else if(rDist===minDist){
       mouthRight.push(locs[i])
-    }else if(uDist===min){
+    }else if(uDist===minDist){
+      mouthUp.push(locs[i]);
+    }else{
+      mouthBottom.push(locs[i]);
+    }
+  }
+  return {
+    mouthLeft,
+    mouthRight,
+    mouthUp,
+    mouthBottom
+  }
+}
+
+function getMouthPoints2(locs){
+  const xPoints = [...locs.sort((a,b)=>a.x-b.x)];
+  const yPoints = [...locs.sort((a,b)=>a.y-b.y)];
+  const lPoint = [xPoints[0].x,xPoints[0].y];
+  const rPoint = [xPoints[xPoints.length-1].x,xPoints[xPoints.length-1].y];
+  const uPoint = [yPoints[0].x,yPoints[0].y];
+  const bPoint = [yPoints[yPoints.length-1].x,yPoints[yPoints.length-1].y];
+  
+
+  const mouthLeft = [];
+  const mouthRight = [];
+  const mouthUp = [];
+  const mouthBottom = [];
+
+  for(let i = 0;i<locs.length;i++){
+    const point = [locs[i].x,locs[i].y];
+    
+    const lDist = distance(point,lPoint);
+    const rDist = distance(point,rPoint);
+    const bDist = distance(point,bPoint);
+    const uDist = distance(point,uPoint);
+    const minDist = Math.min(lDist,rDist,bDist,uDist);
+
+    if(lDist===minDist){
+      mouthLeft.push(locs[i])
+    }else if(rDist===minDist){
+      mouthRight.push(locs[i])
+    }else if(uDist===minDist){
       mouthUp.push(locs[i]);
     }else{
       mouthBottom.push(locs[i]);

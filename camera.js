@@ -20,6 +20,7 @@ function initCamera(){
     navigator.mediaDevices.getUserMedia({video:true})
     .then((data)=>{
       video = document.createElement('video');
+      
       if(mode==='camera'){
         video.srcObject = data;
       }else if(mode==='video1'){
@@ -32,6 +33,8 @@ function initCamera(){
       
       video.play();
       video.onloadeddata = ()=>{
+        video.style.width = 400;
+        video.style.height = 400;
         camCanvas.width = video.videoWidth;
         camCanvas.height = video.videoHeight;
       }
@@ -39,11 +42,5 @@ function initCamera(){
     .catch((err)=>{
       console.log('error:', err)
     })
-  }else{
-    closeCamera();
   }
-}
-
-function closeCamera(){
-  video = null;
 }

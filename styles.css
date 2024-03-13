@@ -5,6 +5,7 @@ body {
   display: flex;
   justify-content: center;
   align-items: center;
+  background-color: black;
 }
 
 .flex {
@@ -21,6 +22,10 @@ body {
   gap: 20px;
 }
 
+video {
+  width: 400px;
+  height: 400px;
+}
 
 #camCanvas {
   max-width: 300px;
