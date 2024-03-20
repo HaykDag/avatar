@@ -20,7 +20,7 @@ class Avatar{
     this.segments[1].update();
     for(let i = 0;i<this.particles.length;i++){
       this.particles[i].update(offsetX);
-      this.particles[i].draw(ctx)
+      this.particles[i].draw(ctx);
     }
   }
   draw(ctx,offsetX,offsetY,mouthX,mouthY){

@@ -27,7 +27,7 @@ sliderY.onchange = (e)=>{
   mouthY = sliderY.value;
 }
 
-initMouseMode();
+if(mode==='mouse') initMouseMode();
 
 function animate(){
   ctx.clearRect(0,0,canvas.width,canvas.height);
@@ -114,21 +114,7 @@ function animate(){
 }
 
 function initMouseMode(){
-  canvas.addEventListener('mousemove',(e)=>{
-    ctx.clearRect(0,0,canvas.width,canvas.height);
-      
-    let {offsetX, offsetY} = e;
-    offsetX -= 188;
-    offsetY -= 164;
-    //ctx.drawImage(img,0,0,400,400);
-      
-    ctx.save();
-    ctx.translate(188,164);
-      
-    avatar.draw(ctx,offsetX,offsetY,mouthX,mouthY);
-    
-    ctx.restore();
-  });
+  canvas.addEventListener('mousemove',mouseMove);
 }
 
 canvas.addEventListener('click',(e)=>{
@@ -237,3 +223,19 @@ function getMouthPoints2(locs){
     mouthBottom
   }
 }
+
+function mouseMove (e){
+  ctx.clearRect(0,0,canvas.width,canvas.height);
+    
+  let {offsetX, offsetY} = e;
+  offsetX -= 188;
+  offsetY -= 164;
+  //ctx.drawImage(img,0,0,400,400);
+    
+  ctx.save();
+  ctx.translate(188,164);
+    
+  avatar.draw(ctx,offsetX,offsetY,mouthX,mouthY);
+  console.log('what')
+  ctx.restore();
+};

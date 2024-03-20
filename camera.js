@@ -2,7 +2,8 @@ const camCanvas = document.getElementById('camCanvas');
 const camCtx = camCanvas.getContext('2d',{ willReadFrequently: true });
 const inputModeEl = document.getElementById('inputMode');
 const startBtn = document.getElementById('startBtn');
-
+const sliders = document.getElementById('sliders');
+const info = document.getElementById('info');
 let video = null;
 let mode = 'mouse';
 
@@ -11,12 +12,16 @@ inputModeEl.onchange = (e)=>{
   mode = e.target.value;
   if(mode==='mouse'){
     initMouseMode();
+    sliders.style.display = 'flex';
   }else{
     initCamera();
     animate();
+    canvas.removeEventListener('mousemove',mouseMove);
+    sliders.style.display = 'none';
   }
   if(mode==='camera'){
     startBtn.style.display = 'block';
+    info.style.display = 'flex';
   }else{
     startBtn.style.display = 'none';
   }
