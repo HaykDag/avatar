@@ -24,6 +24,7 @@ inputModeEl.onchange = (e)=>{
     info.style.display = 'flex';
   }else{
     startBtn.style.display = 'none';
+    info.style.display = 'none';
   }
 }
 
